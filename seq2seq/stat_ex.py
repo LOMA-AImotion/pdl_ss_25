@@ -12,7 +12,7 @@ import lightning as L
 
 token_to_id = {'what' : 0,
                'is' : 1,
-               'statquest' : 2,
+               'DL' : 2,
                'awesome': 3,
                '<EOS>' : 4,
               }
@@ -21,11 +21,11 @@ id_to_token = {v: k for k, v in token_to_id.items()}
 
 sentence1 = [token_to_id["what"],
             token_to_id["is"], 
-            token_to_id["statquest"], 
+            token_to_id["DL"], 
             token_to_id["<EOS>"],
             token_to_id["awesome"]]
 
-sentence2 = [token_to_id["statquest"],
+sentence2 = [token_to_id["DL"],
             token_to_id["is"], 
             token_to_id["what"], 
             token_to_id["<EOS>"], 
@@ -34,7 +34,7 @@ sentence2 = [token_to_id["statquest"],
 inputs = torch.tensor([sentence1, sentence2])
 
 label1 = [token_to_id["is"], 
-        token_to_id["statquest"], 
+        token_to_id["DL"], 
         token_to_id["<EOS>"], 
         token_to_id["awesome"], 
         token_to_id["<EOS>"]]
@@ -56,10 +56,12 @@ model = DecoderOnlyTransformer(num_tokens=len(token_to_id), d_model=2, max_len=6
 
 model_input = torch.tensor([token_to_id["what"], 
                             token_to_id["is"], 
-                            token_to_id["statquest"], 
+                            token_to_id["DL"], 
                             token_to_id["<EOS>"]])
 
 def run_prompt(model_input: torch.tensor, model: L.LightningModule):
+    print(">>> ", " ".join([id_to_token[i.item()] for i in model_input]))
+
     predictions = model(model_input) 
     predicted_id = torch.tensor([torch.argmax(predictions[-1,:])])
     predicted_ids = predicted_id
